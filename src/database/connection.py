@@ -5,7 +5,6 @@ from config import Config
 
 
 DATABASE_URL = Config.get_database_url()
-print(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
 SessionFactory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
