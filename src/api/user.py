@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 
-from schema.request import SignUpRequest, LogInRequest, UserUpdateRequest
+from schema.request import SignUpRequest, LogInRequest, UserUpdateRequest, UserInactiveRequest
 from schema.response import UserSchema, JWTResponse
 
 from database.repository import UserRepository
@@ -23,6 +23,8 @@ def user_sign_up_handler(
     
     user: User | None = user_repository.get_user_by_email(email=request.email)
     if user:
+        if not user.is_active:
+            raise HTTPException(status_code=400, detail="Inactive User Email")
         raise HTTPException(status_code=409, detail="Already Registered Email")
 
     hashed_password: str = user_service.hash_password(
@@ -48,6 +50,9 @@ def user_log_in_handler(
 
     if not user:
         raise HTTPException(status_code=404, detail="User Not Found")
+    
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive User")
     
     verified: bool = user_service.verify_password(
         password=request.password,
@@ -102,9 +107,33 @@ def update_user_handler(
     hashed_password: str | None = user_service.hash_password(
         password=request.new_password,
     )
-    user: User = user_repository.update_user(
-        user=user,
-        username=request.username,
-        password=hashed_password,
-    )
+
+    user.update(username=request.username, password=hashed_password)
+    user: User = user_repository.update_user(user=user)
     return UserSchema.from_orm(user)
+
+
+@router.patch("/inactive", status_code=204)
+def inactive_user_handler(
+    request: UserInactiveRequest,
+    access_token: str = Depends(get_access_token),
+    user_service: UserService = Depends(),
+    user_repository: UserRepository = Depends(),
+):
+    user_id: str = user_service.decode_token(token=access_token)
+    if request.id != int(user_id):
+        raise HTTPException(status_code=401, detail="Not Authorized")
+    user: User | None = user_repository.get_user_by_id(user_id=user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User Not Found")
+    
+    verified: bool = user_service.verify_password(
+        password=request.password,
+        hashed_password=user.password,
+    )
+    
+    if not verified:
+        raise HTTPException(status_code=401, detail="Not Authorized")
+
+    user.inactive()
+    user: User = user_repository.update_user(user=user)

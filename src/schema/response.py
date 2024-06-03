@@ -9,6 +9,7 @@ class UserSchema(BaseModel):
     id: int
     email: str
     username: str
+    is_active: bool
 
     class Config:
         orm_mode = True
@@ -34,6 +35,7 @@ class BulletinBoardListSchema(BaseModel):
 
 
 class UsernameResponse(BaseModel):
+    id: int
     username: str
 
     class Config:

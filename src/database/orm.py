@@ -35,6 +35,16 @@ class User(Base, BaseMixin):
             password=hashed_password,
             username=username,
         )
+    
+    def update(self, username: str, password: str) -> "User":
+        self.username = username
+        if password:
+            self.password = password
+        return self
+
+    def inactive(self) -> "User":
+        self.is_active = False
+        return self
 
     
 class BulletinBoard(Base, BaseMixin):
@@ -56,6 +66,13 @@ class BulletinBoard(Base, BaseMixin):
             contents=contents,
             user_id=user_id, 
         )
+    
+    def update(self, request) -> "BulletinBoard":
+        if request.title:
+            self.title = request.title
+        if request.contents:
+            self.contents = request.contents
+        return self
 
 
 # from sqlalchemy.schema import CreateTable

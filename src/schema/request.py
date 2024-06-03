@@ -1,5 +1,6 @@
 import re
-from pydantic import BaseModel, EmailStr, validator, Field
+from enum import Enum
+from pydantic import BaseModel, EmailStr, validator
 from fastapi import HTTPException
 
 
@@ -76,3 +77,18 @@ class BulletinBoardRequest(BaseModel):
         if len(v) > 100:
             raise HTTPException(status_code=422, detail="100 Character Limit")
         return v
+    
+
+class UserInactiveRequest(BaseModel):
+    id: int
+    password: str
+
+
+class OrderBy(str, Enum):
+    created_at="cteated_at"
+    hits="hits"
+
+
+class Order(str, Enum):
+    asc="asc"
+    desc="desc"
