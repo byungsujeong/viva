@@ -90,7 +90,7 @@ def update_bulletinBoard_handler(
 
 
 @router.delete("/{bulletinBoard_id}", status_code=204)
-def update_bulletinBoard_handler(
+def delete_bulletinBoard_handler(
     bulletinBoard_id: int,
     access_token: str = Depends(get_access_token),
     user_service: UserService = Depends(),
