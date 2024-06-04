@@ -1,0 +1,59 @@
+- 회원기능
+    - [x] 회원가입 [User ORM](https://github.com/byungsujeong/viva/blob/master/src/database/orm.py)
+        - 사용자 이름
+        - Email
+        - 비밀번호
+            - [x] 단방향 암호화를 적용해주세요 [hash_password](https://github.com/byungsujeong/viva/blob/master/src/service/userService.py)
+            - [x] 비밀번호 규칙은 8자 이상, 소문자, 대문자, 특수문자 각 1자리 이상 포함되어야 합니다. [SignUpRequest validator](https://github.com/byungsujeong/viva/blob/master/src/schema/request.py)
+    - [x] 로그인 [user_log_in_handler](https://github.com/byungsujeong/viva/blob/master/src/api/user.py)
+        - Email과 비밀번호를 입력받아 받아서 로그인 합니다.
+    - [x] 회원정보 수정 [update_user_handler](https://github.com/byungsujeong/viva/blob/master/src/api/user.py)
+        - 회원 본인만 수정가능합니다.
+        - 수정시에는 기존 비밀번호를 입력받고 유효성 검증을 해주세요. [UserUpdateRequest validator](https://github.com/byungsujeong/viva/blob/master/src/schema/request.py)
+        - 사용자 이름 및 비밀번호를 수정가능합니다.
+- [x] 게시글 작성 [bulletinBoard_post_handler](https://github.com/byungsujeong/viva/blob/master/src/api/bulletinBoard.py)
+    - 회원만 작성 가능합니다.
+    - 글 제목 : 100자 제한 [BulletinBoardRequest validator](https://github.com/byungsujeong/viva/blob/master/src/schema/request.py)
+    - 내용 : 이모지 (ex. 👍) 작성이 가능해야 합니다. (db설정 charset=utf8mb4, collation=utf8mb4_unicode_ci)
+- [x] 게시글 수정 [update_bulletinBoard_handler](https://github.com/byungsujeong/viva/blob/master/src/api/bulletinBoard.py)
+    - 작성자 본인만 수정 가능합니다.
+- [x] 게시글 삭제 [delete_bulletinBoard_handler](https://github.com/byungsujeong/viva/blob/master/src/api/bulletinBoard.py)
+    - 작성자 본인만 삭제 가능합니다.
+- [x] 게시글 목록 [get_bulletinBoard_list_handler](https://github.com/byungsujeong/viva/blob/master/src/api/bulletinBoard.py)
+    - 비회원도 조회 가능합니다.
+    - 게시글 제목이 반환됩니다.
+    - 작성자의 사용자 이름이 반환됩니다. [BulletinBoardListResponse](https://github.com/byungsujeong/viva/blob/master/src/schema/response.py)
+    - 조회수가 반환됩니다.
+- [x] 게시글 조회 [get_bulletinBoard_detail_handler](https://github.com/byungsujeong/viva/blob/master/src/api/bulletinBoard.py)
+    - 비회원도 조회 가능합니다.
+    - 작성자의 사용자 이름이 반환됩니다.
+    - 게시글 내용이 반환됩니다.
+    - 게시글 제목이 반환됩니다.
+    - 게시글 작성시간이 반환됩니다.
+    - 게시글 수정시간이 반환됩니다.
+        - 수정하지 않았다면 빈값(`””`) 반환해주세요 [replace_field](https://github.com/byungsujeong/viva/blob/master/src/service/bulletinBoardService.py)
+     
+- [x] FastAPI로 구현해주세요
+- [x] 인증방식은 JWT으로 구현해주세요 [encode_token](https://github.com/byungsujeong/viva/blob/master/src/service/userService.py)
+    - Access Token의 유효기간은 1시간 입니다. [access_expires](https://github.com/byungsujeong/viva/blob/master/src/service/userService.py)
+    - Refresh Token의 유효기간은 24시간 입니다. [refresh_expires](https://github.com/byungsujeong/viva/blob/master/src/service/userService.py)
+- [x] RESTful API로 작성해주세요
+- [x] Json으로 Response 해주세요
+
+- [] 인증 및 인가 부분에 대한 Middleware를 구현
+- [] 구현된 로직에 대한 Unittest를 작성
+- [x] FastAPI로 구현
+- [x] 회원 탈퇴를 구현 [inactive_user_handler](https://github.com/byungsujeong/viva/blob/master/src/api/user.py)
+    - 회원 탈퇴는 비밀번호를 입력받아 탈퇴를 합니다.
+    - 탈퇴한 사용자 작성글은 작성자 이름에`탈퇴한 유저` 로 표시 되어야 합니다. [replace_field](https://github.com/byungsujeong/viva/blob/master/src/service/bulletinBoardService.py)
+- [x] Log를 수집하여 MongoDB에 적재하는 기능을 구현 [LoggingMiddleware](https://github.com/byungsujeong/viva/blob/master/src/logs/middleware.py)
+    - [] User ID - 마스킹 필요
+    - [] 접속 IP - 마스킹 필요
+    - [x] 접근한 API URL
+    - [] Request Data
+    - [x] Response Status Code
+    - [x] 로그의 보관기간(TTL)은 60일 입니다. [conflog](https://github.com/byungsujeong/viva/blob/master/src/logs/conflog.py)
+- [x] 게시글 목록의 정렬방식을 다음과 같은 방식으로 구현 [get_bulletinBoard_list](https://github.com/byungsujeong/viva/blob/master/src/database/repository.py)
+    - 조회수순
+    - 작성일순
+- [x] 게시글 목록에 Pagination을 구현 [get_bulletinBoard_list_handler paginate](https://github.com/byungsujeong/viva/blob/master/src/api/bulletinBoard.py)
