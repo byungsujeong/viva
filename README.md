@@ -40,17 +40,17 @@
 - [x] RESTful API로 작성해주세요
 - [x] Json으로 Response 해주세요
 
-- [] 인증 및 인가 부분에 대한 Middleware를 구현
-- [] 구현된 로직에 대한 Unittest를 작성
+- [ ] 인증 및 인가 부분에 대한 Middleware를 구현
+- [ ] 구현된 로직에 대한 Unittest를 작성
 - [x] FastAPI로 구현
 - [x] 회원 탈퇴를 구현 [inactive_user_handler](https://github.com/byungsujeong/viva/blob/master/src/api/user.py)
     - 회원 탈퇴는 비밀번호를 입력받아 탈퇴를 합니다.
     - 탈퇴한 사용자 작성글은 작성자 이름에`탈퇴한 유저` 로 표시 되어야 합니다. [replace_field](https://github.com/byungsujeong/viva/blob/master/src/service/bulletinBoardService.py)
-- [x] Log를 수집하여 MongoDB에 적재하는 기능을 구현 [LoggingMiddleware](https://github.com/byungsujeong/viva/blob/master/src/logs/middleware.py)
-    - [] User ID - 마스킹 필요
-    - [] 접속 IP - 마스킹 필요
+- [ ] Log를 수집하여 MongoDB에 적재하는 기능을 구현 [LoggingMiddleware](https://github.com/byungsujeong/viva/blob/master/src/logs/middleware.py)
+    - [ ] User ID - 마스킹 필요
+    - [ ] 접속 IP - 마스킹 필요
     - [x] 접근한 API URL
-    - [] Request Data
+    - [ ] Request Data
     - [x] Response Status Code
     - [x] 로그의 보관기간(TTL)은 60일 입니다. [conflog](https://github.com/byungsujeong/viva/blob/master/src/logs/conflog.py)
 - [x] 게시글 목록의 정렬방식을 다음과 같은 방식으로 구현 [get_bulletinBoard_list](https://github.com/byungsujeong/viva/blob/master/src/database/repository.py)
