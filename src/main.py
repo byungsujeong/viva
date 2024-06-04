@@ -6,11 +6,14 @@ from fastapi_pagination import add_pagination
 
 from api import user, bulletinBoard
 
+from logs.middleware import LoggingMiddleware
+
 
 app = FastAPI()
 app.include_router(user.router)
 app.include_router(bulletinBoard.router)
 add_pagination(app)
+app.add_middleware(LoggingMiddleware)
 
 
 @app.get("/")
